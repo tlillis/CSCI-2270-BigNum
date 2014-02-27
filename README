@@ -1,0 +1,31 @@
+CSCI 2270- Data Structures
+Spring 2014
+
+Originally Authored by Elizabeth White
+
+Modifications by Taylor Andrews <github.com/taylorjandrews>
+
+---Files---
+README
+Makefile         - GNU makefile to build all relevant code
+OriginalMF		 - original MakeFile provided for the assignment
+BigNum.cxx		 - implemenation of a BigNum 
+BigNum.h		 - contains all necessary overhead for BigNum
+TaylorsTest.cxx	 - my personal test file for BigNum
+TestBigNum.cxx	 - original test file provided for the assignment
+
+
+---Executables---
+TaylorsTest      - runs my personal test file
+
+
+***Building***
+
+Build All:
+ make
+
+Build TaylorsTest:
+ make TaylorsTest
+
+Clean:
+ make clean
