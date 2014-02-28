@@ -123,6 +123,8 @@ namespace HW3
     //should probably be removed (don't forget the header file)
     void BigNum::printDigits()
     {
+		if (!positive)
+			cout << "-";
 		for (unsigned int i = 0; i < used; i++)
 		{			
 			cout << digits[used - i - 1];
@@ -144,25 +146,47 @@ namespace HW3
 
 	BigNum& BigNum::operator=(const BigNum& anotherBigNum)
 	{
+		if(&anotherBigNum == this)
+		{
+			return *this;
+		}
+		else
+		{
+			delete [] digits;
+			capacity = anotherBigNum.capacity;
+			used = anotherBigNum.used;
+			positive = anotherBigNum.positive;
+			
+			digits = new unsigned int[capacity];
+			
+			for (unsigned int i = 0; i < used; i++)
+			{
+				digits[i] = anotherBigNum.digits[i];
+			}
+		}		
+		
 		return *this;
 	}
 
-  
-	BigNum& BigNum::operator+=(const BigNum& addend)  
+  	BigNum& BigNum::operator+=(const BigNum& addend)  
 	{
+		*this = *this + addend;
 		return *this;
 	}
 
 	BigNum& BigNum::operator-=(const BigNum& subtractand)
 	{
+		*this = *this - subtractand;
 		return *this;
 	}
 
 	BigNum& BigNum::operator*=(const BigNum& multiplicand)
 	{
+		*this = *this * multiplicand;
 		return *this;
 	}
-
+	
+	/*
 	BigNum& BigNum::operator/=(const BigNum& divisor)
 	{
 		return *this;
@@ -172,22 +196,23 @@ namespace HW3
 	{
 		return *this;
 	}
+	*/
 
 	BigNum& BigNum::operator++()
 	{
-		return *this;
+		return (*this += 1);
 	}
 
 	BigNum& BigNum::operator--()
 	{
-		return *this;
+		return (*this -= 1);
 	}
+	
 
 	BigNum& BigNum::diff(const BigNum& a, const BigNum& b)
 	{
 		return *this;
 	}
-  
 
 	BigNum& BigNum::mult(const BigNum& a, const BigNum& b)
 	{
@@ -198,10 +223,11 @@ namespace HW3
 	{
 		return *this;
 	}
-
+	
+	
 	BigNum operator+(const BigNum& a, const BigNum& b)
 	{
-		BigNum result;
+		BigNum result = 5;
 		return result;
 	}
 
@@ -216,7 +242,8 @@ namespace HW3
 		BigNum result;
 		return result;
 	}
-
+	
+	/*
 	BigNum operator / (const BigNum& a, const BigNum& b)
 	{
 		BigNum result;
@@ -229,6 +256,7 @@ namespace HW3
 		BigNum result;
 		return result;
 	}
+	*/
 
 	bool operator>(const BigNum& a, const BigNum& b)
 	{
@@ -289,14 +317,20 @@ namespace HW3
 
 	std::istream& operator>>(std::istream &is, BigNum& bignum)
 	{
+		string in = "";
+		is >> in;
+		bignum = (string) in;
+		
 		return is;
 	}
 	
+	/*
 	BigNum factorial(const BigNum& a)
 	{
 		BigNum result;
 		return result;
     }
+    */
   }
 
 
