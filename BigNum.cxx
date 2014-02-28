@@ -16,6 +16,7 @@ using namespace std;
 
 namespace HW3
 {
+	//Constructors
 	BigNum::BigNum()
 	{	
 		capacity = DEFAULT_CAPACITY;
@@ -97,7 +98,7 @@ namespace HW3
 		
 		trim();
 	}
- 
+
     BigNum::BigNum(const BigNum& anotherBigNum)
     {
 		used = anotherBigNum.used;
@@ -119,19 +120,6 @@ namespace HW3
 		delete [] digits;
     }
     
-    //helper method for Taylors Test
-    //should probably be removed (don't forget the header file)
-    void BigNum::printDigits()
-    {
-		if (!positive)
-			cout << "-";
-		for (unsigned int i = 0; i < used; i++)
-		{			
-			cout << digits[used - i - 1];
-		}
-		cout << endl << endl;
-	}
-    
     void BigNum::resize(unsigned int n)
 	{
 		unsigned int* newDigits = new unsigned int[n];
@@ -144,6 +132,7 @@ namespace HW3
 		capacity = n;
 	}
 
+	//Operators with =
 	BigNum& BigNum::operator=(const BigNum& anotherBigNum)
 	{
 		if(&anotherBigNum == this)
@@ -197,7 +186,8 @@ namespace HW3
 		return *this;
 	}
 	*/
-
+	
+	//Incrementers
 	BigNum& BigNum::operator++()
 	{
 		return (*this += 1);
@@ -208,7 +198,7 @@ namespace HW3
 		return (*this -= 1);
 	}
 	
-
+	//Helper methods
 	BigNum& BigNum::diff(const BigNum& a, const BigNum& b)
 	{
 		return *this;
@@ -224,7 +214,7 @@ namespace HW3
 		return *this;
 	}
 	
-	
+	//friend functions for +,-,*
 	BigNum operator+(const BigNum& a, const BigNum& b)
 	{
 		BigNum result = 5;
@@ -258,6 +248,7 @@ namespace HW3
 	}
 	*/
 
+	//friend comparators
 	bool operator>(const BigNum& a, const BigNum& b)
 	{
 		return true;
@@ -309,9 +300,17 @@ namespace HW3
 		}
 	}
 	
-	
+	//input and output
 	std::ostream& operator<<(std::ostream &os, const BigNum& bignum)
 	{
+		if(!bignum.positive)
+			os << "-";
+		
+		for (unsigned int i = 0; i < bignum.used; i++)
+		{
+			os << bignum.digits[bignum.used - i -1];
+		}
+		
 		return os;
 	}	 
 
