@@ -226,10 +226,11 @@ namespace HW3
 	//friend functions for +,-,*
 	BigNum operator+(const BigNum& a, const BigNum& b)
 	{
-		BigNum result;
-		//BigNum neg = -1;
-		//bool borrowedFrom = false;
+		BigNum result, negative = -1;
+		int hold = 0;
+		bool borrowedFrom = false;
 		
+		//checks if either BigNum is 0
 		if((a == 0) && (b == 0))
 			return result;
 		
@@ -245,6 +246,75 @@ namespace HW3
 			return result;
 		}
 		
+		//sets result's sign to be positive or negative based on which 
+		//  BigNum is bigger, also sets results capacity to be large as possible
+		if (a.positive && b.positive)
+		{
+			result.positive = true;
+			
+			if(a > b)
+				result.capacity = a.capacity + 1;
+			else
+				result.capacity = b.capacity + 1;
+		}
+		
+		else if (!a.positive && !b.positive)
+		{
+			result.positive = false;
+			
+			if(a > b)
+				result.capacity = a.capacity + 1;
+			else
+				result.capacity = b.capacity + 1;
+		}
+		
+		else 
+		{
+			BigNum aPos = a, bPos = b;
+			aPos.positive = true;
+			bPos.positive = true;
+			
+			if (aPos > bPos)
+				result.positive = a.positive;
+			else if (bPos > aPos)
+				result.positive = b.positive;
+			else
+				return result;
+		}
+		
+		//does the addition
+		for(unsigned int i = 0; i < result.capacity; i++)
+		{	
+			//increased the count of digits stored
+			if ((i < a.used) || (i < b.used) || hold != 0)
+				result.used += 1;
+			//else
+				
+			
+			//if there are still digits in a or b to add, add them
+			if(i < a.used)
+				hold += a.digits[i] * (a.positive * 2 - 1);
+			if(i < b.used)
+				hold += b.digits[i] * (b.positive * 2 - 1);
+			
+			//account for borrowing
+			if (hold < 0)
+			{
+				borrowedFrom = true;
+				hold += 10;
+			}
+			
+			result.digits[i] = hold % 10;
+			hold /= 10;
+			
+			if (borrowedFrom)
+			{
+				borrowedFrom = false;
+				hold--;
+			}
+		}
+		
+		result.trim();
 		return result;
 	}
 
@@ -256,7 +326,56 @@ namespace HW3
       
 	BigNum operator*(const BigNum& a, const BigNum& b)
 	{
-		BigNum result;
+		BigNum result = 0, negative = -1, ten = 10;
+		
+		//checks if either one is zero, in which case the answer will be 0
+		if ((a == 0) || (b==0))
+			return result;
+		
+		if (a == -1)
+		{
+			result = b;
+			result.positive = !b.positive;
+			return result;
+		}
+		
+		if (b == -1)
+		{
+			result = a;
+			result.positive = !a.positive;
+			return result;
+		}
+		
+		//use recursion
+		/*
+		if(a.used == 1 && b.used == 1)
+			result = a.digits[0] * b.digits[0];
+		else
+		{
+			for(int i = 0; i < a.used; i++)
+			{
+				result *= ten;
+				result += b * a.digits[used - i - 1];
+			}
+		}
+		*/
+		
+		for(unsigned int i = 0; i < a.used; i++)
+		{
+			for(unsigned int j = 0; j < b.used; j++)
+			{
+				
+			}
+			result.used++;
+		}
+		
+		//sets the sign based on the signs of the two multiplicands
+		result.positive = true;
+		
+		if (a.positive != b.positive)
+			result.positive = false;
+		
+		result.trim();		
 		return result;
 	}
 	

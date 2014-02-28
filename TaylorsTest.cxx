@@ -33,12 +33,12 @@ int main()
 		 << "with the int constructor" << endl;
 	cout << test4 << endl << endl;
 	
-	BigNum test7 = 10;
-	BigNum test8 = 0;
+	BigNum test7 = (string) "740098230456745674512";
+	BigNum test8 = (string) "312345234523454574512";
 	BigNum test9 = test7 + test8;
 	cout << test9 << endl;
 	
-	
+	/*
 	BigNum n = 10;
 	BigNum n2 = 0;
 	
@@ -46,6 +46,8 @@ int main()
 		cout << "correct" << endl;
 	else
 		cout << "NOPE" << endl;
+		
+	*/
 	
 	return 0;
 }
