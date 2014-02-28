@@ -15,10 +15,13 @@ using namespace HW3;
 
 int main()
 {
-	BigNum test = 90;
+	BigNum test = 99999;
+	cout << "testing big num 99999 " 
+		 << "with the int constructor" << endl;
 	test.printDigits();
 	
 	BigNum test2 = (string) "00008";
+	cout << "testing big num 00008 with the string constructor" << endl;
 	test2.printDigits();
 	
 	return 0;

@@ -57,6 +57,8 @@ namespace HW3
 			used++;
 			
 		} while (num != 0);
+		
+		trim();
 	}
 
 	// Constructor that receives a string; leading 0's will be ignored
@@ -78,7 +80,7 @@ namespace HW3
 			positive = true;
 		}
 		
-		while(i < (str.size() ))
+		while(i < str.size())
 		{
 			if(used == capacity)
 			{
@@ -93,6 +95,7 @@ namespace HW3
 			used++;
 		}
 		
+		trim();
 	}
  
     BigNum::BigNum(const BigNum& anotherBigNum)
@@ -107,6 +110,8 @@ namespace HW3
 		{
 			digits[i] = anotherBigNum.digits[i];
 		}
+		
+		trim();
     }
 
     BigNum::~BigNum()
@@ -263,6 +268,17 @@ namespace HW3
 	// trim leading zeros
 	void BigNum::trim()
 	{
+		bool zero = false;
+		
+		if (digits[used - 1] == 0)
+			zero = true;
+		
+		while(zero)
+		{
+			used--;
+			if(digits[used - 1] != 0)
+				zero = false;
+		}
 	}
 	
 	
