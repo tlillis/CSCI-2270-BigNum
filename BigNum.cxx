@@ -42,24 +42,33 @@ namespace HW3
 			num *= -1;
 		}
 		
-		do 
-		{	
-			rem = num % 10;
-			num /= 10;
-			
-			if(used == capacity)
-			{
-				resize(capacity * 2);
-			}
-			
-			digits[i] = rem;
-			
-			i++;
-			used++;
-			
-		} while (num != 0);
+		if(num == 0)
+		{
+			digits[0] = 0;
+			used = 1;
+		}
 		
-		trim();
+		else 
+		{
+			do 
+			{	
+				rem = num % 10;
+				num /= 10;
+				
+				if(used == capacity)
+				{
+					resize(capacity * 2);
+				}
+				
+				digits[i] = rem;
+				
+				i++;
+				used++;
+				
+			} while (num != 0);
+			
+			trim();
+		}
 	}
 
 	// Constructor that receives a string; leading 0's will be ignored
@@ -217,15 +226,24 @@ namespace HW3
 	//friend functions for +,-,*
 	BigNum operator+(const BigNum& a, const BigNum& b)
 	{
-		BigNum result = 10, neg = -1;
+		BigNum result;
+		//BigNum neg = -1;
 		//bool borrowedFrom = false;
 		
-		if(a == 0)
-			return b;
-		if (b == 0)
-			return a;
+		if((a == 0) && (b == 0))
+			return result;
 		
+		else if (a == 0)
+		{
+			result = b;
+			return result;
+		}
 		
+		else if (b == 0)
+		{
+			result = a;
+			return result;
+		}
 		
 		return result;
 	}
@@ -260,7 +278,37 @@ namespace HW3
 	//friend comparators
 	bool operator>(const BigNum& a, const BigNum& b)
 	{
-		return true;
+		if((a == b) || (b.positive > a.positive))
+			return false;
+			
+		if(a.positive > b.positive)
+			return true;
+			
+		if((a.positive == 1) && (b.positive == 1)) 
+		{
+			if(a.used > b.used)
+				return true;
+		
+			for (unsigned int i = 0; i < a.used; i++)
+			{
+				if(a.digits[a.used - i - 1] > b.digits[a.used - i - 1])
+					return true;
+			}
+		}
+		
+		else if((a.positive == 0) && (b.positive == 0)) 
+		{
+			if(b.used > a.used)
+				return true;
+		
+			for (unsigned int i = 0; i < a.used; i++)
+			{
+				if(b.digits[a.used - i - 1] > a.digits[a.used - i - 1])
+					return true;
+			}
+		}
+		
+		return false;
 	}
 
 
@@ -284,7 +332,10 @@ namespace HW3
 
 	bool operator==(const BigNum& a, const BigNum& b)
 	{
-		for (unsigned int i = 0; i < a.used; ++i)
+		if(a.used != b.used)
+			return false;
+			
+		for (unsigned int i = 0; i < a.used; i++)
 		{
 			if(a.digits[i] != b.digits[i])
 				return false;

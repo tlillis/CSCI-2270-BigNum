@@ -28,14 +28,24 @@ int main()
 	cout << "testing copy constructor on BigNum test2" << endl;
 	cout << test3 << endl << endl;
 	
-	BigNum test4 = 99999;
+	BigNum test4 = -99599;
 	cout << "testing big num -99599 " 
 		 << "with the int constructor" << endl;
 	cout << test4 << endl << endl;
 	
-	BigNum test7 = 0
-	BigNum test8 = 5;
-	cout << test7 + test8 << endl;
+	BigNum test7 = 10;
+	BigNum test8 = 0;
+	BigNum test9 = test7 + test8;
+	cout << test9 << endl;
+	
+	
+	BigNum n = 1;
+	BigNum n2 = 10;
+	
+	if(n > n2)
+		cout << "correct" << endl;
+	else
+		cout << "NOPE" << endl;
 	
 	return 0;
 }
