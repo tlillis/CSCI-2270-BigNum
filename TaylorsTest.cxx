@@ -20,7 +20,7 @@ int main()
 		 << "with the int constructor" << endl;
 	cout << test << endl << endl;
 	
-	BigNum test2 = (string) "00008";
+	BigNum test2 = (string) "0000894893458";
 	cout << "testing big num 00008 with the string constructor" << endl;
 	cout << test2 << endl << endl;
 	
@@ -28,26 +28,14 @@ int main()
 	cout << "testing copy constructor on BigNum test2" << endl;
 	cout << test3 << endl << endl;
 	
-	BigNum test4 = -99599;
+	BigNum test4 = 99999;
 	cout << "testing big num -99599 " 
 		 << "with the int constructor" << endl;
 	cout << test4 << endl << endl;
 	
-	test2 = test2;
-	cout << "testing = operator on test2 = test 2 (prints test2)" << endl;
-	cout << test2 << endl << endl;
-	
-	test2 = test4;
-	cout << "testing = operator on test2 = test 4 (prints test2)" << endl;
-	cout << test4 << endl << endl;
-	
-	BigNum test5 = 10;
-	test5 + test4;
-	cout << test << endl << endl;
-	
-	BigNum test6;
-	cin >> test6;
-	cout << test6 << endl << endl;
+	BigNum test7 = 0
+	BigNum test8 = 5;
+	cout << test7 + test8 << endl;
 	
 	return 0;
 }

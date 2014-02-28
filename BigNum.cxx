@@ -217,7 +217,16 @@ namespace HW3
 	//friend functions for +,-,*
 	BigNum operator+(const BigNum& a, const BigNum& b)
 	{
-		BigNum result = 5;
+		BigNum result = 10, neg = -1;
+		//bool borrowedFrom = false;
+		
+		if(a == 0)
+			return b;
+		if (b == 0)
+			return a;
+		
+		
+		
 		return result;
 	}
 
@@ -275,6 +284,12 @@ namespace HW3
 
 	bool operator==(const BigNum& a, const BigNum& b)
 	{
+		for (unsigned int i = 0; i < a.used; ++i)
+		{
+			if(a.digits[i] != b.digits[i])
+				return false;
+		}
+		
 		return true;
 	}
 
