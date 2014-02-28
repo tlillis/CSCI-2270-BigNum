@@ -15,7 +15,11 @@ using namespace HW3;
 
 int main()
 {
-	BigNum test = 10;
-	cout << "made it" << endl;
+	BigNum test = 90;
+	test.printDigits();
+	
+	BigNum test2 = (string) "00008";
+	test2.printDigits();
+	
 	return 0;
 }

@@ -192,6 +192,9 @@ namespace HW3
 	BigNum& diff(const BigNum& a, const BigNum& b);
 	BigNum& sum(const BigNum& a, const BigNum& b);
 	BigNum& mult(const BigNum& a, const BigNum& b);
+  
+  public:
+	void printDigits();
     
     };
 

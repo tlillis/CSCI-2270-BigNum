@@ -11,6 +11,7 @@
 #include <cstring>
 #include <cassert>
 #include "BigNum.h"
+
 using namespace std;
 
 namespace HW3
@@ -112,6 +113,17 @@ namespace HW3
     {
 		delete [] digits;
     }
+    
+    //helper method for Taylors Test
+    //should probably be removed (don't forget the header file)
+    void BigNum::printDigits()
+    {
+		for (unsigned int i = 0; i < used; i++)
+		{			
+			cout << digits[used - i - 1];
+		}
+		cout << endl << endl;
+	}
     
     void BigNum::resize(unsigned int n)
 	{
