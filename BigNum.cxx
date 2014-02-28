@@ -314,19 +314,19 @@ namespace HW3
 
 	bool operator>=(const BigNum& a, const BigNum& b)
 	{
-		return true;
+		return ((a > b) || (a == b));
 	}
 
 
 	bool operator<(const BigNum& a, const BigNum& b)
 	{
-		return true;
+		return (b > a);
 	}
 
 
 	bool operator<=(const BigNum& a, const BigNum& b)
 	{
-		return true;
+		return ((b > a) || (a == b));
 	}
 
 
@@ -347,7 +347,7 @@ namespace HW3
 
 	bool operator!=(const BigNum& a, const BigNum& b)
 	{
-		return true;
+		return (!(a == b));
 	}
 
 	// trim leading zeros

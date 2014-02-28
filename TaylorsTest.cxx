@@ -39,10 +39,10 @@ int main()
 	cout << test9 << endl;
 	
 	
-	BigNum n = 1;
-	BigNum n2 = 10;
+	BigNum n = 10;
+	BigNum n2 = 0;
 	
-	if(n > n2)
+	if(n != n2)
 		cout << "correct" << endl;
 	else
 		cout << "NOPE" << endl;
