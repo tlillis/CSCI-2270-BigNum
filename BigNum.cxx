@@ -80,32 +80,41 @@ namespace HW3
 		unsigned int i = 0, k = 0, val = 0;
 		used = 0;
 		
-		if (str.substr(0,1).compare("-") == 0)
-		{
-			positive = false;
-			i = 1;
-		}
-		else
+		if(str.compare("0") == 0)
 		{
 			positive = true;
+			digits[0] = 0;
+			used = 1;
 		}
-		
-		while(i < str.size())
-		{
-			if(used == capacity)
+		else 
+		{		
+			if (str.substr(0,1).compare("-") == 0)
 			{
-				resize(capacity * 2);
+				positive = false;
+				i = 1;
+			}
+			else
+			{
+				positive = true;
 			}
 			
-			val = atoll((str.substr(str.size()- i - positive, 1)).c_str());
-			digits[k] = val;
+			while(i < str.size())
+			{
+				if(used == capacity)
+				{
+					resize(capacity * 2);
+				}
+				
+				val = atoll((str.substr(str.size()- i - positive, 1)).c_str());
+				digits[k] = val;
+				
+				k++;
+				i++;
+				used++;
+			}
 			
-			k++;
-			i++;
-			used++;
+			trim();
 		}
-		
-		trim();
 	}
 
     BigNum::BigNum(const BigNum& anotherBigNum)
@@ -226,9 +235,8 @@ namespace HW3
 	//friend functions for +,-,*
 	BigNum operator+(const BigNum& a, const BigNum& b)
 	{
-		BigNum result, negative = -1;
+		BigNum result = 0;
 		int hold = 0;
-		bool borrowedFrom = false;
 		
 		//checks if either BigNum is 0
 		if((a == 0) && (b == 0))
@@ -253,9 +261,9 @@ namespace HW3
 			result.positive = true;
 			
 			if(a > b)
-				result.capacity = a.capacity + 1;
+				result.capacity = a.used + 1;
 			else
-				result.capacity = b.capacity + 1;
+				result.capacity = b.used + 1;
 		}
 		
 		else if (!a.positive && !b.positive)
@@ -263,9 +271,9 @@ namespace HW3
 			result.positive = false;
 			
 			if(a > b)
-				result.capacity = a.capacity + 1;
+				result.capacity = a.used + 1;
 			else
-				result.capacity = b.capacity + 1;
+				result.capacity = b.used + 1;
 		}
 		
 		else 
@@ -274,44 +282,45 @@ namespace HW3
 			aPos.positive = true;
 			bPos.positive = true;
 			
-			if (aPos > bPos)
+			if (aPos > bPos) 
+			{
 				result.positive = a.positive;
+				result.capacity = a.used + 1;
+			}
 			else if (bPos > aPos)
+			{
 				result.positive = b.positive;
+				result.capacity = b.used + 1;
+			}
 			else
 				return result;
+		}
+		
+		for(unsigned int i = 0; i < result.capacity; i++)
+		{
+			result.digits[i] = 0;
 		}
 		
 		//does the addition
 		for(unsigned int i = 0; i < result.capacity; i++)
 		{	
 			//increased the count of digits stored
-			if ((i < a.used) || (i < b.used) || hold != 0)
-				result.used += 1;
-			//else
-				
+			if ((i < a.used) || (i < b.used))
+				result.used++;
 			
 			//if there are still digits in a or b to add, add them
 			if(i < a.used)
-				hold += a.digits[i] * (a.positive * 2 - 1);
+				hold += a.digits[i] * (a.positive * 2 - 1) + result.digits[i];
 			if(i < b.used)
-				hold += b.digits[i] * (b.positive * 2 - 1);
+				hold += b.digits[i] * (b.positive * 2 - 1) + result.digits[i];
 			
-			//account for borrowing
 			if (hold < 0)
-			{
-				borrowedFrom = true;
-				hold += 10;
-			}
+				hold *= -1;
+			cout << hold << endl;
 			
 			result.digits[i] = hold % 10;
-			hold /= 10;
-			
-			if (borrowedFrom)
-			{
-				borrowedFrom = false;
-				hold--;
-			}
+			result.digits[i + 1] = hold / 10;
+			hold = 0;
 		}
 		
 		result.trim();

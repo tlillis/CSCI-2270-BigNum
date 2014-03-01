@@ -15,6 +15,7 @@ using namespace HW3;
 
 int main()
 {
+	/*
 	BigNum test = 99999;
 	cout << "testing big num 99999 " 
 		 << "with the int constructor" << endl;
@@ -32,11 +33,13 @@ int main()
 	cout << "testing big num -99599 " 
 		 << "with the int constructor" << endl;
 	cout << test4 << endl << endl;
+	*/
 	
-	BigNum test7 = (string) "740098230456745674512";
-	BigNum test8 = (string) "312345234523454574512";
+	BigNum test7 = (string) "9999999999999999999";
+	//BigNum test8 = (string) "1234567890";
+	BigNum test8 = 999999999;
 	BigNum test9 = test7 + test8;
-	cout << test9 << endl;
+	cout << test9 << endl << endl;
 	
 	/*
 	BigNum n = 10;
