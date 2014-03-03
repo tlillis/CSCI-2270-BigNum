@@ -260,20 +260,20 @@ namespace HW3
 		{
 			result.positive = true;
 			
-			if(a > b)
-				result.capacity = a.used + 1;
-			else
-				result.capacity = b.used + 1;
+			//if(a > b)
+				//result.capacity = a.used + 1;
+			//else
+				//result.capacity = b.used + 1;
 		}
 		
 		else if (!a.positive && !b.positive)
 		{
 			result.positive = false;
 			
-			if(a > b)
-				result.capacity = a.used + 1;
-			else
-				result.capacity = b.used + 1;
+			//if(a > b)
+				//result.capacity = a.used + 1;
+			//else
+				//result.capacity = b.used + 1;
 		}
 		
 		else 
@@ -285,12 +285,12 @@ namespace HW3
 			if (aPos > bPos) 
 			{
 				result.positive = a.positive;
-				result.capacity = a.used + 1;
+				//result.capacity = a.used + 1;
 			}
 			else if (bPos > aPos)
 			{
 				result.positive = b.positive;
-				result.capacity = b.used + 1;
+				//result.capacity = b.used + 1;
 			}
 			else
 				return result;
@@ -307,16 +307,19 @@ namespace HW3
 			//increased the count of digits stored
 			if ((i < a.used) || (i < b.used))
 				result.used++;
+				
+			if(result.digits[i] != 0)
+				hold += result.digits[i];
 			
 			//if there are still digits in a or b to add, add them
 			if(i < a.used)
-				hold += a.digits[i] * (a.positive * 2 - 1) + result.digits[i];
+				hold += a.digits[i] * (a.positive * 2 - 1);
 			if(i < b.used)
-				hold += b.digits[i] * (b.positive * 2 - 1) + result.digits[i];
+				hold += b.digits[i] * (b.positive * 2 - 1);
 			
 			if (hold < 0)
 				hold *= -1;
-			cout << hold << endl;
+			//cout << hold << endl;
 			
 			result.digits[i] = hold % 10;
 			result.digits[i + 1] = hold / 10;
