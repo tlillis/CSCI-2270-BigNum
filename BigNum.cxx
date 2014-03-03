@@ -78,64 +78,55 @@ namespace HW3
 		
 		unsigned int i = 0, k = 0, val = 0;
 		used = 0;
-		
-		if(str.compare("0") == 0)
+	
+		if (str.substr(0,1).compare("-") == 0)
+		{
+			positive = false;
+			i = 1;
+		}
+		else if (str.substr(0,1).compare("+") == 0)
 		{
 			positive = true;
-			digits[0] = 0;
-			used = 1;
+			i = 1;
 		}
-		else 
-		{		
-			if (str.substr(0,1).compare("-") == 0)
+		if (i == 1)
+		{
+			while(i < str.size())
 			{
-				positive = false;
-				i = 1;
-			}
-			else if (str.substr(0,1).compare("+") == 0)
-			{
-				positive = true;
-				i = 1;
-			}
-			if (i == 1)
-			{
-				while(i < str.size())
+				if(used == capacity)
 				{
-					if(used == capacity)
-					{
-						resize(capacity * 2);
-					}
-					
-					val = atoll((str.substr((str.size()-i), 1)).c_str());
-					digits[k] = val;
-					
-					k++;
-					i++;
-					used++;
+					resize(capacity * 2);
 				}
+				
+				val = atoll((str.substr((str.size()-i), 1)).c_str());
+				digits[k] = val;
+				
+				k++;
+				i++;
+				used++;
 			}
-			else
-			{
-				positive = true;
-				while(i < str.size())
-				{
-					if(used == capacity)
-					{
-						resize(capacity * 2);
-					}
-					
-					val = atoll((str.substr((str.size()-i-1), 1)).c_str());
-					digits[k] = val;
-					
-					k++;
-					i++;
-					used++;
-				}
-			}
-			
-			
-			trim();
 		}
+		else
+		{
+			positive = true;
+			while(i < str.size())
+			{
+				if(used == capacity)
+				{
+					resize(capacity * 2);
+				}
+				
+				val = atoll((str.substr((str.size()-i-1), 1)).c_str());
+				digits[k] = val;
+				
+				k++;
+				i++;
+				used++;
+			}
+		}
+		
+		
+		trim();
 	}
 
     BigNum::BigNum(const BigNum& anotherBigNum)
@@ -259,20 +250,21 @@ namespace HW3
 	//friend functions for +,-,*
 	BigNum operator+(const BigNum& a, const BigNum& b)
 	{	
-		BigNum result = 0;
+		cout << a << " " << b << endl;
+		BigNum result = 0, zero = 0;
 		int hold = 0;
 		
 		//checks if either BigNum is 0
-		if((a == 0) && (b == 0))
+		if((a == zero) && (b == zero))
 			return result;
 		
-		else if (a == 0)
+		else if (a == zero)
 		{
 			result = b;
 			return result;
 		}
 		
-		else if (b == 0)
+		else if (b == zero)
 		{
 			result = a;
 			return result;
@@ -337,10 +329,9 @@ namespace HW3
 				
 			if (hold < 0)
 				hold *= -1;
-			
+				
 			result.digits[i] = hold % 10;
 			result.digits[i + 1] = hold / 10;
-			
 			hold = 0;
 		}
 		
@@ -350,7 +341,8 @@ namespace HW3
 
 	BigNum operator-(const BigNum& a, const BigNum& b)
 	{
-		BigNum result;
+		BigNum result, negative = -1;
+		result = a + (b * negative);
 		return result;
 	}
       
@@ -362,14 +354,14 @@ namespace HW3
 		if ((a == 0) || (b==0))
 			return result;
 		
-		if (a == -1)
+		if (a == negative)
 		{
 			result = b;
 			result.positive = !b.positive;
 			return result;
 		}
 		
-		if (b == -1)
+		if (b == negative)
 		{
 			result = a;
 			result.positive = !a.positive;
@@ -390,11 +382,22 @@ namespace HW3
 		}
 		*/
 		
+		if(a == ten)
+		{
+			result.resize(a.used + 1);
+			result.used = a.used;
+			result.used++;
+			cout << result.used << endl;
+			copy(a.digits, a.digits + a.used, result.digits);
+			//result.digits[0] = 0;
+			return result;
+		}
+		
 		for(unsigned int i = 0; i < a.used; i++)
 		{
 			for(unsigned int j = 0; j < b.used; j++)
 			{
-				
+					
 			}
 			result.used++;
 		}
@@ -444,7 +447,7 @@ namespace HW3
 			{
 				if(a.digits[a.used - i - 1] > b.digits[a.used - i - 1])
 					return true;
-				else
+				else if (a.digits[a.used - i - 1] < b.digits[a.used - i - 1])
 					return false;
 			}
 		}
@@ -453,11 +456,15 @@ namespace HW3
 		{
 			if(b.used > a.used)
 				return true;
+			if(a.used > b.used)
+				return false;
 		
 			for (unsigned int i = 0; i < a.used; i++)
 			{
 				if(b.digits[a.used - i - 1] > a.digits[a.used - i - 1])
 					return true;
+				else if (b.digits[a.used - i - 1] < a.digits[a.used - i - 1])
+					return false;
 			}
 		}
 		
@@ -515,6 +522,8 @@ namespace HW3
 		{
 			used--;
 			if(digits[used - 1] != 0)
+				zero = false;
+			if (used == 1)
 				zero = false;
 		}
 	}
