@@ -35,10 +35,10 @@ int main()
 	cout << test4 << endl << endl;
 	*/
 	
-	BigNum test7 = (string) "-19";
-	BigNum test8 = (string) "20";
+	BigNum test7 = (string) "340";
+	BigNum test8 = (string) "-340";
 	//BigNum test8 = 999999999;
-	test7 += test8;
+	test7 -= test8;
 	cout << test7 << endl << endl;
 	
 	/*

@@ -250,10 +250,9 @@ namespace HW3
 	//friend functions for +,-,*
 	BigNum operator+(const BigNum& a, const BigNum& b)
 	{	
-		cout << a << " " << b << endl;
 		BigNum result = 0, zero = 0;
 		int hold = 0;
-		
+				
 		//checks if either BigNum is 0
 		if((a == zero) && (b == zero))
 			return result;
@@ -311,30 +310,88 @@ namespace HW3
 				return result;
 		}
 		
-		//does the addition
-		for(unsigned int i = 0; i < result.capacity; i++)
-		{	
-			//increased the count of digits stored
-			if ((i < a.used) || (i < b.used))
-				result.used++;
+		if(a.positive == b.positive)
+		{
+			//does the addition
+			for(unsigned int i = 0; i < result.capacity; i++)
+			{				
+				//increased the count of digits stored
+				if ((i < a.used) || (i < b.used))
+					result.used++;
+					
+				if(result.digits[i] != 0)
+					hold += result.digits[i] * (a.positive * 2 - 1);
 				
-			if(result.digits[i] != 0)
-				hold += result.digits[i] * (a.positive * 2 - 1);
-			
-			//if there are still digits in a or b to add, add them
-			if(i < a.used)
-				hold += a.digits[i] * (a.positive * 2 - 1);
-			if(i < b.used)
-				hold += b.digits[i] * (b.positive * 2 - 1);
+				//if there are still digits in a or b to add, add them
+				if(i < a.used)
+					hold += a.digits[i] * (a.positive * 2 - 1);
+				if(i < b.used)
+					hold += b.digits[i] * (b.positive * 2 - 1);
+					
+				if (hold < 0)
+				{
+					hold *= -1;
+				}
+					
+				result.digits[i] = hold % 10;
+				result.digits[i + 1] = hold / 10;
 				
-			if (hold < 0)
-				hold *= -1;
-				
-			result.digits[i] = hold % 10;
-			result.digits[i + 1] = hold / 10;
-			hold = 0;
+				hold = 0;
+			}
 		}
-		
+		else
+		{
+			bool borrowedFrom = false;
+			
+			BigNum aPos = a, bPos = b;
+			aPos.positive = true;
+			bPos.positive = true;
+			
+			if((aPos > bPos) && !a.positive)
+			{
+				bPos.positive = a.positive;
+				aPos.positive = b.positive;
+			}
+			else if ((bPos > aPos) && !b.positive)
+			{
+				bPos.positive = a.positive;
+				aPos.positive = b.positive;
+			}
+			else
+			{
+				aPos.positive = a.positive;
+				bPos.positive = b.positive;
+			}
+			
+			cout << aPos << " " << bPos << endl;
+			for(unsigned int i = 0; i < result.capacity; i++)
+			{				
+				//increased the count of digits stored
+				if ((i < aPos.used) || (i < bPos.used) || (hold != 0))
+					result.used++;
+				
+				//if there are still digits in a or b to add, add them
+				if(i < aPos.used)
+					hold += aPos.digits[i] * (aPos.positive * 2 - 1);
+				if(i < bPos.used)
+					hold += bPos.digits[i] * (bPos.positive * 2 - 1);
+					
+				if (hold < 0)
+				{
+					borrowedFrom = true;
+					hold += 10;
+				}
+					
+				result.digits[i] = hold % 10;
+				hold /= 10;
+				
+				if(borrowedFrom)
+				{
+					borrowedFrom = false;
+					hold -= 1;
+				}
+			}
+		}
 		result.trim();
 		return result;
 	}
