@@ -444,6 +444,8 @@ namespace HW3
 			{
 				if(a.digits[a.used - i - 1] > b.digits[a.used - i - 1])
 					return true;
+				else
+					return false;
 			}
 		}
 		
@@ -540,13 +542,11 @@ namespace HW3
 		return is;
 	}
 	
-	/*
 	BigNum factorial(const BigNum& a)
 	{
 		BigNum result;
 		return result;
     }
-    */
   }
 
 
