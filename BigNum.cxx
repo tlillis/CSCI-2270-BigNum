@@ -47,7 +47,6 @@ namespace HW3
 			digits[0] = 0;
 			used = 1;
 		}
-		
 		else 
 		{
 			do 
@@ -93,25 +92,47 @@ namespace HW3
 				positive = false;
 				i = 1;
 			}
+			else if (str.substr(0,1).compare("+") == 0)
+			{
+				positive = true;
+				i = 1;
+			}
+			if (i == 1)
+			{
+				while(i < str.size())
+				{
+					if(used == capacity)
+					{
+						resize(capacity * 2);
+					}
+					
+					val = atoll((str.substr((str.size()-i), 1)).c_str());
+					digits[k] = val;
+					
+					k++;
+					i++;
+					used++;
+				}
+			}
 			else
 			{
 				positive = true;
+				while(i < str.size())
+				{
+					if(used == capacity)
+					{
+						resize(capacity * 2);
+					}
+					
+					val = atoll((str.substr((str.size()-i-1), 1)).c_str());
+					digits[k] = val;
+					
+					k++;
+					i++;
+					used++;
+				}
 			}
 			
-			while(i < str.size())
-			{
-				if(used == capacity)
-				{
-					resize(capacity * 2);
-				}
-				
-				val = atoll((str.substr(str.size()- i - positive, 1)).c_str());
-				digits[k] = val;
-				
-				k++;
-				i++;
-				used++;
-			}
 			
 			trim();
 		}
@@ -140,14 +161,17 @@ namespace HW3
     
     void BigNum::resize(unsigned int n)
 	{
-		unsigned int* newDigits = new unsigned int[n];
-	
-		copy(digits, digits + capacity, newDigits);
+		if (n > capacity)
+		{
+			unsigned int* newDigits = new unsigned int[n];
 		
-		delete[] digits;
+			copy(digits, digits + capacity, newDigits);
+			
+			delete[] digits;
 
-		digits = newDigits;	
-		capacity = n;
+			digits = newDigits;	
+			capacity = n;
+		}
 	}
 
 	//Operators with =
@@ -234,7 +258,7 @@ namespace HW3
 	
 	//friend functions for +,-,*
 	BigNum operator+(const BigNum& a, const BigNum& b)
-	{
+	{	
 		BigNum result = 0;
 		int hold = 0;
 		
@@ -260,22 +284,21 @@ namespace HW3
 		{
 			result.positive = true;
 			
-			//if(a > b)
-				//result.capacity = a.used + 1;
-			//else
-				//result.capacity = b.used + 1;
+			if(a > b)
+				result.resize(a.used + 1);
+			else
+				result.resize(b.used + 1);
 		}
 		
 		else if (!a.positive && !b.positive)
 		{
 			result.positive = false;
 			
-			//if(a > b)
-				//result.capacity = a.used + 1;
-			//else
-				//result.capacity = b.used + 1;
-		}
-		
+			if(b > a)
+				result.resize(b.used + 1);
+			else
+				result.resize(a.used + 1);
+		}		
 		else 
 		{
 			BigNum aPos = a, bPos = b;
@@ -285,20 +308,15 @@ namespace HW3
 			if (aPos > bPos) 
 			{
 				result.positive = a.positive;
-				//result.capacity = a.used + 1;
+				result.resize(a.used + 1);
 			}
 			else if (bPos > aPos)
 			{
 				result.positive = b.positive;
-				//result.capacity = b.used + 1;
+				result.resize(b.used + 1);
 			}
 			else
 				return result;
-		}
-		
-		for(unsigned int i = 0; i < result.capacity; i++)
-		{
-			result.digits[i] = 0;
 		}
 		
 		//does the addition
@@ -309,20 +327,20 @@ namespace HW3
 				result.used++;
 				
 			if(result.digits[i] != 0)
-				hold += result.digits[i];
+				hold += result.digits[i] * (a.positive * 2 - 1);
 			
 			//if there are still digits in a or b to add, add them
 			if(i < a.used)
 				hold += a.digits[i] * (a.positive * 2 - 1);
 			if(i < b.used)
 				hold += b.digits[i] * (b.positive * 2 - 1);
-			
+				
 			if (hold < 0)
 				hold *= -1;
-			//cout << hold << endl;
 			
 			result.digits[i] = hold % 10;
 			result.digits[i + 1] = hold / 10;
+			
 			hold = 0;
 		}
 		
@@ -415,10 +433,12 @@ namespace HW3
 		if(a.positive > b.positive)
 			return true;
 			
-		if((a.positive == 1) && (b.positive == 1)) 
+		if(a.positive && b.positive) 
 		{
 			if(a.used > b.used)
 				return true;
+			if(b.used > a.used)
+				return false;
 		
 			for (unsigned int i = 0; i < a.used; i++)
 			{
@@ -427,7 +447,7 @@ namespace HW3
 			}
 		}
 		
-		else if((a.positive == 0) && (b.positive == 0)) 
+		else if(!a.positive && !b.positive) 
 		{
 			if(b.used > a.used)
 				return true;
