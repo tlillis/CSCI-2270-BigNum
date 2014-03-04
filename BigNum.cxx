@@ -125,8 +125,8 @@ namespace HW3
 			}
 		}
 		
-		
-		trim();
+		if(str.compare("0") != 0)
+			trim();
 	}
 
     BigNum::BigNum(const BigNum& anotherBigNum)
@@ -405,10 +405,12 @@ namespace HW3
       
 	BigNum operator*(const BigNum& a, const BigNum& b)
 	{
-		BigNum result = 0, negative = -1, ten = 10;
+		BigNum result = 0, negative = -1, ten = 10, zero = 0;
+		int temp = 0, carryOver = 1;
+		unsigned int exp = 0;
 		
 		//checks if either one is zero, in which case the answer will be 0
-		if ((a == 0) || (b==0))
+		if ((a == zero) || (b == zero))
 			return result;
 		
 		if (a == negative)
@@ -425,38 +427,22 @@ namespace HW3
 			return result;
 		}
 		
-		//use recursion
-		/*
 		if(a.used == 1 && b.used == 1)
+		{
 			result = a.digits[0] * b.digits[0];
-		else
-		{
-			for(int i = 0; i < a.used; i++)
-			{
-				result *= ten;
-				result += b * a.digits[used - i - 1];
-			}
-		}
-		*/
-		
-		if(a == ten)
-		{
-			result.resize(a.used + 1);
-			result.used = a.used;
-			result.used++;
-			cout << result.used << endl;
-			copy(a.digits, a.digits + a.used, result.digits);
-			//result.digits[0] = 0;
 			return result;
 		}
 		
-		for(unsigned int i = 0; i < a.used; i++)
+		for(unsigned int i = 1; i < (b.used); i++)
 		{
-			for(unsigned int j = 0; j < b.used; j++)
+			for(unsigned int j = 0; j < a.used; j++)
 			{
-					
+				exp = j;
+				while(exp--)
+					carryOver*= 10;
+				cout << carryOver << endl;
+				temp += a.digits[j] * b.digits[i];
 			}
-			result.used++;
 		}
 		
 		//sets the sign based on the signs of the two multiplicands
@@ -465,7 +451,11 @@ namespace HW3
 		if (a.positive != b.positive)
 			result.positive = false;
 		
-		result.trim();		
+		if (result != zero)
+			result.trim();
+			
+		BigNum hold = temp;
+		result = hold;
 		return result;
 	}
 	
