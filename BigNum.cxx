@@ -406,8 +406,8 @@ namespace HW3
 	BigNum operator*(const BigNum& a, const BigNum& b)
 	{
 		BigNum result = 0, negative = -1, ten = 10, zero = 0;
-		int temp = 0, carryOver = 1;
-		unsigned int exp = 0;
+		BigNum hold = 0, larger, smaller;
+		int temp = 0, carryOver = 0;
 		
 		//checks if either one is zero, in which case the answer will be 0
 		if ((a == zero) || (b == zero))
@@ -433,16 +433,35 @@ namespace HW3
 			return result;
 		}
 		
-		for(unsigned int i = 1; i < (b.used); i++)
+		BigNum aPos = a, bPos = b;
+		aPos.positive = true;
+		bPos.positive = true;
+		
+		if (aPos > bPos) 
 		{
-			for(unsigned int j = 0; j < a.used; j++)
+			larger = a;
+			smaller = b;
+		}
+		else
+		{
+			larger = b;
+			smaller = a;
+		}
+		
+		for(unsigned int i = 0; i < (smaller.used); i++)
+		{
+			for(unsigned int j = 0; j < larger.used; j++)
 			{
-				exp = j;
-				while(exp--)
-					carryOver*= 10;
-				cout << carryOver << endl;
-				temp += a.digits[j] * b.digits[i];
+				temp = larger.digits[j] * smaller.digits[i];
+				if(j > 0)
+					temp *= (10 * j);
+				carryOver += temp;
 			}
+			if(i > 0)
+				carryOver *= (10 * i);
+			BigNum holdPrev = carryOver;
+			hold += holdPrev;
+			carryOver = 0;
 		}
 		
 		//sets the sign based on the signs of the two multiplicands
@@ -451,10 +470,9 @@ namespace HW3
 		if (a.positive != b.positive)
 			result.positive = false;
 		
-		if (result != zero)
-			result.trim();
+		if (hold != zero)
+			hold.trim();
 			
-		BigNum hold = temp;
 		result = hold;
 		return result;
 	}
