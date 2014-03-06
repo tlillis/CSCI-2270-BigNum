@@ -15,11 +15,15 @@ using namespace HW3;
 
 int main()
 {
-	/*
 	BigNum test = 99999;
 	cout << "testing big num 99999 " 
 		 << "with the int constructor" << endl;
 	cout << test << endl << endl;
+	
+	BigNum test4 = -99599;
+	cout << "testing big num -99599 " 
+		 << "with the int constructor" << endl;
+	cout << test4 << endl << endl;
 	
 	BigNum test2 = (string) "0000894893458";
 	cout << "testing big num 00008 with the string constructor" << endl;
@@ -29,19 +33,25 @@ int main()
 	cout << "testing copy constructor on BigNum test2" << endl;
 	cout << test3 << endl << endl;
 	
-	BigNum test4 = -99599;
-	cout << "testing big num -99599 " 
-		 << "with the int constructor" << endl;
-	cout << test4 << endl << endl;
-	*/
+	BigNum test7 = (string) "987654";
+	BigNum test8 = (string) "123456";
+	BigNum test9 = test7 + test8;
+	cout << "Testing addition"  << endl;
+	cout << test7 << " + " << test8 << " = " << test9 << endl << endl;
 	
-	BigNum test7 = (string) "00000000000000000000000000000000000";
-	BigNum test8 = (string) "999999999999999999999999999999999999";
-	//BigNum test8 = 999999999;
-	test7 *= test8;
-	cout << test7 << endl << endl;
+	BigNum test10 = (string) "987654";
+	BigNum test11 = (string) "123456";
+	BigNum test12 = test10 - test11;
+	cout << "Testing subtraction"  << endl;
+	cout << test10 << " - " << test11 << " = " << test12 << endl << endl;
 	
-	/*
+	BigNum test13 = (string) "-987654";
+	BigNum test14 = (string) "-123456";
+	BigNum test15 = test13 * test14;
+	cout << "Testing multiplication"  << endl;
+	cout << test13 << " * " << test14 << " = " << test15 << endl << endl;
+	
+	
 	BigNum n = 10;
 	BigNum n2 = 0;
 	
@@ -49,8 +59,6 @@ int main()
 		cout << "correct" << endl;
 	else
 		cout << "NOPE" << endl;
-		
-	*/
 	
 	return 0;
 }

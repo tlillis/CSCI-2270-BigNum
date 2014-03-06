@@ -407,6 +407,25 @@ namespace HW3
 		BigNum negative = -1, zero = 0, ten = 10, one = 1;
 		BigNum result = 0, hold = 0;
 		
+		//checks if either one is zero, in which case the answer will be 0
+		if ((a == zero) || (b == zero))
+			return result;
+		
+		//check for multiplication by -1
+		if (a == negative)
+		{
+			result = b;
+			result.positive = (b.positive == a.positive);
+			return result;
+		}
+		
+		if (b == negative)
+		{
+			result = a;
+			result.positive = (b.positive == a.positive);
+			return result;
+		}
+		
 		//ensures no infinte recursion
 		if(a == ten)
 		{
@@ -433,38 +452,6 @@ namespace HW3
 			result.used++;
 			return result;
 		}	
-		
-		//checks if either one is zero, in which case the answer will be 0
-		if ((a == zero) || (b == zero))
-			return result;
-		
-		//checks for multiplication by 1
-		if (a == one)
-		{
-			result = b;
-			return result;
-		}
-		
-		if (b == one)
-		{
-			result = a;
-			return result;
-		}
-		
-		//check for multiplication by -1
-		if (a == negative)
-		{
-			result = b;
-			result.positive = !b.positive;
-			return result;
-		}
-		
-		if (b == negative)
-		{
-			result = a;
-			result.positive = !a.positive;
-			return result;
-		}
 		
 		//check if the bignums are just one digit long
 		if(a.used == 1 && b.used == 1)
@@ -493,6 +480,7 @@ namespace HW3
 			
 		if (result != zero)
 			result.trim();
+		
 		
 		return result;
 	}
