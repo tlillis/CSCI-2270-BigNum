@@ -363,7 +363,6 @@ namespace HW3
 				bPos.positive = b.positive;
 			}
 			
-			cout << aPos << " " << bPos << endl;
 			for(unsigned int i = 0; i < result.capacity; i++)
 			{				
 				//increased the count of digits stored
@@ -405,14 +404,54 @@ namespace HW3
       
 	BigNum operator*(const BigNum& a, const BigNum& b)
 	{
-		BigNum result = 0, negative = -1, ten = 10, zero = 0;
-		BigNum hold = 0, larger, smaller;
-		int temp = 0, carryOver = 0;
+		BigNum negative = -1, zero = 0, ten = 10, one = 1;
+		BigNum result = 0, hold = 0;
+		
+		//ensures no infinte recursion
+		if(a == ten)
+		{
+			result = b;
+			result.capacity++;
+			for(unsigned int i = 0; i < result.used; i++)
+			{
+				result.digits[result.used - i] = result.digits[result.used - i - 1];
+			}
+			result.digits[0] = 0;
+			result.used++;
+			return result;
+		}
+		
+		if(b == ten)
+		{
+			result = a;
+			result.capacity++;
+			for(unsigned int i = 0; i < result.used; i++)
+			{
+				result.digits[result.used - i] = result.digits[result.used - i - 1];
+			}
+			result.digits[0] = 0;
+			result.used++;
+			return result;
+		}	
 		
 		//checks if either one is zero, in which case the answer will be 0
 		if ((a == zero) || (b == zero))
 			return result;
 		
+		//checks for multiplication by 1
+		if (a == one)
+		{
+			result = b;
+			return result;
+		}
+		
+		if (b == one)
+		{
+			result = a;
+			return result;
+		}
+		
+		//check for multiplication by -1
 		if (a == negative)
 		{
 			result = b;
@@ -427,53 +466,34 @@ namespace HW3
 			return result;
 		}
 		
+		//check if the bignums are just one digit long
 		if(a.used == 1 && b.used == 1)
 		{
 			result = a.digits[0] * b.digits[0];
 			return result;
-		}
+		}	
 		
-		BigNum aPos = a, bPos = b;
-		aPos.positive = true;
-		bPos.positive = true;
-		
-		if (aPos > bPos) 
-		{
-			larger = a;
-			smaller = b;
-		}
+		//if they aren't use recursion until they are
 		else
 		{
-			larger = b;
-			smaller = a;
-		}
-		
-		for(unsigned int i = 0; i < (smaller.used); i++)
-		{
-			for(unsigned int j = 0; j < larger.used; j++)
+			for(unsigned int i = 0; i < a.used; i++)
 			{
-				temp = larger.digits[j] * smaller.digits[i];
-				if(j > 0)
-					temp *= (10 * j);
-				carryOver += temp;
+				result *= ten;
+				hold = a.digits[a.used - i - 1];
+				result +=  b * hold;
 			}
-			if(i > 0)
-				carryOver *= (10 * i);
-			BigNum holdPrev = carryOver;
-			hold += holdPrev;
-			carryOver = 0;
+
 		}
-		
+			
 		//sets the sign based on the signs of the two multiplicands
 		result.positive = true;
 		
 		if (a.positive != b.positive)
 			result.positive = false;
-		
-		if (hold != zero)
-			hold.trim();
 			
-		result = hold;
+		if (result != zero)
+			result.trim();
+		
 		return result;
 	}
 	

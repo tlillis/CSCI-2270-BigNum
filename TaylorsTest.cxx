@@ -35,8 +35,8 @@ int main()
 	cout << test4 << endl << endl;
 	*/
 	
-	BigNum test7 = (string) "111";
-	BigNum test8 = (string) "50";
+	BigNum test7 = (string) "00000000000000000000000000000000000";
+	BigNum test8 = (string) "999999999999999999999999999999999999";
 	//BigNum test8 = 999999999;
 	test7 *= test8;
 	cout << test7 << endl << endl;
