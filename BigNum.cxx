@@ -208,7 +208,7 @@ namespace HW3
 		return *this;
 	}
 	
-	/*
+	
 	BigNum& BigNum::operator/=(const BigNum& divisor)
 	{
 		return *this;
@@ -218,7 +218,7 @@ namespace HW3
 	{
 		return *this;
 	}
-	*/
+	
 	
 	//Incrementers
 	BigNum& BigNum::operator++()
@@ -252,40 +252,40 @@ namespace HW3
 	{	
 		BigNum result = 0, zero = 0;
 		int hold = 0;
-				
+
 		//checks if either BigNum is 0
 		if((a == zero) && (b == zero))
 			return result;
-		
+
 		else if (a == zero)
 		{
 			result = b;
 			return result;
 		}
-		
+
 		else if (b == zero)
 		{
 			result = a;
 			return result;
 		}
-		
+
 		//sets result's sign to be positive or negative based on which 
 		//  BigNum is bigger, also sets results capacity to be large as possible
 		if (a.positive && b.positive)
 		{
 			result.positive = true;
-			
+
 			if(a > b)
 				result.resize(a.used + 1);
 			else
 				result.resize(b.used + 1);
 		}
-		
+
 		else if (!a.positive && !b.positive)
 		{
 			result.positive = false;
-			
-			if(b > a)
+
+			if(a > b)
 				result.resize(b.used + 1);
 			else
 				result.resize(a.used + 1);
@@ -295,7 +295,7 @@ namespace HW3
 			BigNum aPos = a, bPos = b;
 			aPos.positive = true;
 			bPos.positive = true;
-			
+
 			if (aPos > bPos) 
 			{
 				result.positive = a.positive;
@@ -310,43 +310,47 @@ namespace HW3
 				return result;
 		}
 		
-		if(a.positive == b.positive)
+		if((a.positive == 1) && (b.positive == 1))
 		{
-			//does the addition
+			
+			bool borrowedFrom = false;
+
 			for(unsigned int i = 0; i < result.capacity; i++)
 			{				
 				//increased the count of digits stored
-				if ((i < a.used) || (i < b.used))
+				if ((i < a.used) || (i < b.used) || (hold != 0))
 					result.used++;
-					
-				if(result.digits[i] != 0)
-					hold += result.digits[i] * (a.positive * 2 - 1);
-				
+
 				//if there are still digits in a or b to add, add them
 				if(i < a.used)
 					hold += a.digits[i] * (a.positive * 2 - 1);
 				if(i < b.used)
 					hold += b.digits[i] * (b.positive * 2 - 1);
-					
+
 				if (hold < 0)
 				{
-					hold *= -1;
+					borrowedFrom = true;
+					hold += 10;
 				}
-					
+
 				result.digits[i] = hold % 10;
-				result.digits[i + 1] = hold / 10;
-				
-				hold = 0;
+				hold /= 10;
+
+				if(borrowedFrom)
+				{
+					borrowedFrom = false;
+					hold -= 1;
+				}
 			}
 		}
-		else
+		else if (a.positive != b.positive)
 		{
 			bool borrowedFrom = false;
-			
+
 			BigNum aPos = a, bPos = b;
 			aPos.positive = true;
 			bPos.positive = true;
-			
+
 			if((aPos > bPos) && !a.positive)
 			{
 				bPos.positive = a.positive;
@@ -362,28 +366,60 @@ namespace HW3
 				aPos.positive = a.positive;
 				bPos.positive = b.positive;
 			}
-			
+
 			for(unsigned int i = 0; i < result.capacity; i++)
 			{				
 				//increased the count of digits stored
 				if ((i < aPos.used) || (i < bPos.used) || (hold != 0))
 					result.used++;
-				
+
 				//if there are still digits in a or b to add, add them
 				if(i < aPos.used)
 					hold += aPos.digits[i] * (aPos.positive * 2 - 1);
 				if(i < bPos.used)
 					hold += bPos.digits[i] * (bPos.positive * 2 - 1);
-					
+
 				if (hold < 0)
 				{
 					borrowedFrom = true;
 					hold += 10;
 				}
-					
+
 				result.digits[i] = hold % 10;
 				hold /= 10;
-				
+
+				if(borrowedFrom)
+				{
+					borrowedFrom = false;
+					hold -= 1;
+				}
+			}
+		}
+		else
+		{
+			bool borrowedFrom = false;
+
+			for(unsigned int i = 0; i < result.capacity; i++)
+			{				
+				//increased the count of digits stored
+				if ((i < a.used) || (i < b.used) || (hold != 0))
+					result.used++;
+
+				//if there are still digits in a or b to add, add them
+				if(i < a.used)
+					hold -= a.digits[i] * (a.positive * 2 - 1);
+				if(i < b.used)
+					hold -= b.digits[i] * (b.positive * 2 - 1);
+
+				if (hold < 0)
+				{
+					borrowedFrom = true;
+					hold += 10;
+				}
+
+				result.digits[i] = hold % 10;
+				hold /= 10;
+
 				if(borrowedFrom)
 				{
 					borrowedFrom = false;
@@ -394,10 +430,23 @@ namespace HW3
 		result.trim();
 		return result;
 	}
-
+	
 	BigNum operator-(const BigNum& a, const BigNum& b)
 	{
 		BigNum result, negative = -1;
+		if((a == 0) && (b == 0))
+			return result;
+		if(a == 0)
+		{
+			result = b;
+			result.positive = !result.positive;
+			return result;
+		}
+		if(b == 0)
+		{
+			result = a;
+			return result;
+		}
 		result = a + (b * negative);
 		return result;
 	}
@@ -405,73 +454,65 @@ namespace HW3
 	BigNum operator*(const BigNum& a, const BigNum& b)
 	{
 		BigNum negative = -1, zero = 0, ten = 10, one = 1;
-		BigNum result = 0, hold = 0;
-		
+		BigNum result;
+		BigNum hold;
+					
 		//checks if either one is zero, in which case the answer will be 0
 		if ((a == zero) || (b == zero))
-			return result;
-		
+			result = 0;
 		//check for multiplication by -1
-		if (a == negative)
+		else if (a == negative)
 		{
 			result = b;
+			result.resize(result.capacity * 2);
 			result.positive = (b.positive == a.positive);
-			return result;
 		}
-		
-		if (b == negative)
+		else if (b == negative)
 		{
 			result = a;
+			result.resize(result.capacity * 2);
 			result.positive = (b.positive == a.positive);
-			return result;
 		}
-		
-		//ensures no infinte recursion
-		if(a == ten)
+		//check for multiplication by 10
+		else if(a == ten)
 		{
 			result = b;
-			result.capacity++;
+			result.resize(a.used + b.used);
 			for(unsigned int i = 0; i < result.used; i++)
 			{
 				result.digits[result.used - i] = result.digits[result.used - i - 1];
 			}
 			result.digits[0] = 0;
 			result.used++;
-			return result;
-		}
-		
-		if(b == ten)
+		}			
+		else if(b == ten)
 		{
 			result = a;
-			result.capacity++;
+			result.resize(a.used + b.used);
 			for(unsigned int i = 0; i < result.used; i++)
 			{
 				result.digits[result.used - i] = result.digits[result.used - i - 1];
 			}
 			result.digits[0] = 0;
 			result.used++;
-			return result;
 		}	
-		
 		//check if the bignums are just one digit long
-		if(a.used == 1 && b.used == 1)
+		else if(a.used == 1 && b.used == 1)
 		{
+			result.resize(result.capacity * 2);
 			result = a.digits[0] * b.digits[0];
-			return result;
 		}	
-		
-		//if they aren't use recursion until they are
 		else
 		{
-			for(unsigned int i = 0; i < a.used; i++)
+			for (unsigned int k = 0; k < a.used; k++)
 			{
 				result *= ten;
-				hold = a.digits[a.used - i - 1];
-				result +=  b * hold;
+				hold = a.digits[a.used - k - 1];
+				result += (b * hold);
 			}
-
-		}
 			
+		}
+		
 		//sets the sign based on the signs of the two multiplicands
 		result.positive = true;
 		
@@ -481,11 +522,10 @@ namespace HW3
 		if (result != zero)
 			result.trim();
 		
-		
 		return result;
 	}
 	
-	/*
+	
 	BigNum operator / (const BigNum& a, const BigNum& b)
 	{
 		BigNum result;
@@ -498,7 +538,7 @@ namespace HW3
 		BigNum result;
 		return result;
 	}
-	*/
+	
 
 	//friend comparators
 	bool operator>(const BigNum& a, const BigNum& b)
@@ -568,6 +608,9 @@ namespace HW3
 		if(a.used != b.used)
 			return false;
 			
+		if(a.positive != b.positive)
+			return false;
+			
 		for (unsigned int i = 0; i < a.used; i++)
 		{
 			if(a.digits[i] != b.digits[i])
@@ -626,7 +669,12 @@ namespace HW3
 	
 	BigNum factorial(const BigNum& a)
 	{
-		BigNum result;
+		BigNum result, fact = 1;
+		for (BigNum i = 1; i <= a; ++i)
+		{
+			fact *= i;
+		}
+		result = fact;
 		return result;
     }
   }
@@ -634,6 +682,3 @@ namespace HW3
 
 
 #endif
-
-
-

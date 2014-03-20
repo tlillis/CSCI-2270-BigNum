@@ -182,7 +182,7 @@ namespace HW3
 	bool positive;          		// Indicates the sign of BigNum (true for positive, false for negative)
 	unsigned int used;            	// Length of the non-garbage array for BigNum digits  
 	unsigned int capacity;        	// Size of the memory allocated for this BigNum 
-	static const unsigned int DEFAULT_CAPACITY = 20;
+	static const unsigned int DEFAULT_CAPACITY = 1;
 
 	// not optional
 	void resize(unsigned int n);  

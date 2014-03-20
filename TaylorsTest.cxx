@@ -1,3 +1,5 @@
+
+
 //Taylor's Personal Test File for the BigNum Assignment
 //taylorjandrews@github.com
 
@@ -33,32 +35,33 @@ int main()
 	cout << "testing copy constructor on BigNum test2" << endl;
 	cout << test3 << endl << endl;
 	
-	BigNum test7 = (string) "987654";
-	BigNum test8 = (string) "123456";
+	BigNum test7 = (string) "-98765432135135135465461315313543546546545616516168464";
+	BigNum test8 = (string) "-100000";
 	BigNum test9 = test7 + test8;
 	cout << "Testing addition"  << endl;
-	cout << test7 << " + " << test8 << " = " << test9 << endl << endl;
+	cout << test7 << " + " << test8 << " = " << endl << test9 << endl << endl;
 	
-	BigNum test10 = (string) "987654";
-	BigNum test11 = (string) "123456";
+	BigNum test10 = (string) "98765432135135135465461315313543546546545616516168464";
+	BigNum test11 = (string) "100000";
 	BigNum test12 = test10 - test11;
 	cout << "Testing subtraction"  << endl;
-	cout << test10 << " - " << test11 << " = " << test12 << endl << endl;
-	
-	BigNum test13 = (string) "-987654";
-	BigNum test14 = (string) "-123456";
+	cout << test10 << " - " << test11 << " = " << endl << test12 << endl << endl;
+
+	BigNum test13 = (string) "1111111111111111111111111111111111111111111";
+	BigNum test14 = (string) "1111111111111111111111111111111111111111111";
 	BigNum test15 = test13 * test14;
 	cout << "Testing multiplication"  << endl;
 	cout << test13 << " * " << test14 << " = " << test15 << endl << endl;
+
+	BigNum n = 123456;
+	BigNum m = 987654;
 	
+	cout << n * m << endl;
 	
-	BigNum n = 10;
-	BigNum n2 = 0;
-	
-	if(n != n2)
-		cout << "correct" << endl;
-	else
-		cout << "NOPE" << endl;
+	BigNum test16 = (string) "100";
+	BigNum test17 = factorial(test16);
+	cout << "Testing Factorial"  << endl;
+	cout << test16 << "! = " << test17 << endl << endl;
 	
 	return 0;
 }
